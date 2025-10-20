@@ -142,7 +142,7 @@ from models import models
 
 def cnn_evaluation_circle_original_cm(feature_cm, subject_range=range(1, 6), experiment_range=range(1, 4), save=False):
     # labels
-    labels = utils_feature_loading.read_labels(dataset='seed', header=True)
+    labels = utils_feature_loading.read_labels(dataset='seed')
     y = torch.tensor(np.array(labels)).view(-1)
     
     # data and evaluation circle
