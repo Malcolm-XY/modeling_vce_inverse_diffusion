@@ -12,7 +12,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # %% Visualization
-def draw_heatmap_1d(data, yticklabels=None, xticklabels=None, figsize=(2, 10)):
+def draw_heatmap_1d(data, yticklabels=None, figsize=(2, 10), title=None):
     """
     Plots a heatmap for an Nx1 array (vertical orientation).
 
@@ -22,8 +22,9 @@ def draw_heatmap_1d(data, yticklabels=None, xticklabels=None, figsize=(2, 10)):
     """
     if yticklabels is None:
         yticklabels = list(range(data.shape[0]))  # Automatically generate indices as labels
-    if xticklabels is None:
-        xticklabels = list(range(data.shape[1]))  # Automatically generate indices as labels
+    
+    if title == None:
+        title = "Vertical Heatmap of Nx1 Array"
     
     if len(data.shape) == 1:
         data = np.reshape(data, (-1, 1))
@@ -34,13 +35,12 @@ def draw_heatmap_1d(data, yticklabels=None, xticklabels=None, figsize=(2, 10)):
     sns.heatmap(
         data, 
         cmap='Blues',
-        cbar=False,
         annot=False,
         linewidths=0.5, 
-        yticklabels=yticklabels,
-        xticklabels=xticklabels
+        xticklabels=False, 
+        yticklabels=yticklabels
     )
-    # plt.title("Vertical Heatmap of Nx1 Array")
+    plt.title(title)
     plt.show()
 
 def draw_joint_heatmap_1d(data_dict):
@@ -62,49 +62,26 @@ def draw_joint_heatmap_1d(data_dict):
     plt.tight_layout()
     plt.show()
 
-def draw_projection(sample_projection, title=None, xticklabels=None, yticklabels=None):
+def draw_projection(sample_projection, title=None):
     """
     Visualizes data projections (common for both datasets).
-    
-    Parameters:
-        sample_projection (np.ndarray): 2D or 3D matrix to visualize.
-        title (str): Optional plot title.
-        xticklabels (list): Optional list of x-axis labels.
-        yticklabels (list): Optional list of y-axis labels.
     """
-    if title is None:
+    if title == None:
         title = "2D Matrix Visualization"
     
-    def apply_axis_labels(ax, xticks, yticks):
-        if xticks is not None:
-            ax.set_xticks(range(len(xticks)))
-            ax.set_xticklabels(xticks, rotation=90)
-        if yticks is not None:
-            ax.set_yticks(range(len(yticks)))
-            ax.set_yticklabels(yticks)
-
     if sample_projection.ndim == 2:
-        fig, ax = plt.subplots()
-        im = ax.imshow(sample_projection, cmap='viridis')
-        plt.colorbar(im, ax=ax)
-        ax.set_title(title)
-        apply_axis_labels(ax, xticklabels, yticklabels)
-        plt.tight_layout()
+        plt.imshow(sample_projection, cmap='viridis')
+        plt.colorbar()
+        plt.title(title)
         plt.show()
-
     elif sample_projection.ndim == 3 and sample_projection.shape[0] <= 100:
         for i in range(sample_projection.shape[0]):
-            fig, ax = plt.subplots()
-            im = ax.imshow(sample_projection[i], cmap='viridis')
-            plt.colorbar(im, ax=ax)
-            ax.set_title(f"Channel {i + 1} Visualization")
-            apply_axis_labels(ax, xticklabels, yticklabels)
-            plt.tight_layout()
+            plt.imshow(sample_projection[i], cmap='viridis')
+            plt.colorbar()
+            plt.title(f"Channel {i + 1} Visualization")
             plt.show()
-
     else:
-        raise ValueError(f"The dimension of sample matrix for drawing is wrong, shape of sample: {sample_projection.shape}")
-
+        raise ValueError(f"the dimension of sample matrix for drawing is wrong, shape of sample: {sample_projection.shape}")
 
 # %% End Program Actions
 import time
